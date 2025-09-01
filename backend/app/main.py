@@ -16,3 +16,7 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the hospital management system!"}
+
+@app.get("/health")
+def read_route_health():
+    return {"status":"ok"}
