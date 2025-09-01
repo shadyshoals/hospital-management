@@ -1,0 +1,30 @@
+# Python virtualenv
+backend/env/
+
+# Bytecode
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# dotenv
+.env
+
+# Editor files
+.DS_Store
+.vscode/
+*.swp
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Docker
+__pycache__/
+*.db
+*.sqlite3
+
+# Alembic
+backend/alembic/versions/
