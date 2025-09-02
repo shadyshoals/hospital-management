@@ -4,10 +4,27 @@
 # Optional: Expose models when importing the package
 #from .patient import Patient  # Example
 
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from app.database import Base
+from enum import Enum
+
+class UserRole(str, Enum):
+    # Software operators, directors...
+    admin = "admin"
+    # Medical Personnel
+    doctor = "doctor"
+    nurse = "nurse"
+    psw = "psw"
+    nurse_manager = "nurse manager"
+    pharmacist = "pharmacist"
+    physiotherapist = "physiotherapist"
+    # Social Work
+    recreation = "recreation"
+    recreation_manager = "recreation manager"
+    social_worker = "social worker"
+    counsellor = "counsellor"
 
 class User(Base):
     __tablename__ = "users"
@@ -17,6 +34,9 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    role = Column(String, nullable=False) # e.g. admin, doctor, nurse
+    role = Column(SQLEnum(UserRole), nullable=False, default=UserRole.doctor) # e.g. admin, doctor, nurse
 
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
+
+# Relationships
+appointments = relationship("Appointment", back_populates="doctor")
