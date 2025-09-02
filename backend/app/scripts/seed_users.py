@@ -1,47 +1,33 @@
-from app.database import SessionLocal
-from app.models.user import User
-from datetime import datetime, timezone
-from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+from app.database import SessionLocal, engine, Base
+from app.models.user import User, UserRole
+from app.security import get_password_hash  # optional, if you hash passwords
 
-#password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Create tables if they don't exist (safe if Alembic already ran)
+Base.metadata.create_all(bind=engine)
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+# Open a session
+db: Session = SessionLocal()
 
-db = SessionLocal()
-
-users_to_create = [
-    User(
-        first_name="Alice", 
-        last_name="Smith", 
-        username="alice",
-        hashed_password=hash_password("password123"),
-        role="doctor", 
-        created_at=datetime.now(timezone.utc)
-    ),
-    User(
-        first_name="Bob", 
-        last_name="Johnson", 
-        username="bob",
-        hashed_password=hash_password("password123"),
-        role="doctor", 
-        created_at=datetime.now(timezone.utc)
-    ),
-    User(
-        first_name="Carol", 
-        last_name="Lee", 
-        username="carol",
-        hashed_password=hash_password("password123"),
-        role="admin", 
-        created_at=datetime.now(timezone.utc)
-    ),
+# Define seed users
+seed_users = [
+    {"username": "bbababab333abaliddddce", "first_name": "Aledabdseeice", "last_name": "Smadsfiteeeh", "role": "recreation manager", "password": "alic33e123"},
+    {"username": "babababa33odddb", "first_name": "Boeedabsbseeb", "last_name": "Johnfdsadseeeon", "role": "psw", "password": "bob33123"},
+    {"username": "cadabababadddbdddrol", "first_name": "Careeasbasdbaeeol", "last_name": "Leeeeebsasee", "role": "nurse manager", "password": "car33ol123"},
 ]
 
-for user in users_to_create:
+# Insert users
+for u in seed_users:
+    hashed_password = get_password_hash(u["password"])
+    user = User(
+        username=u["username"],
+        first_name=u["first_name"],
+        last_name=u["last_name"],
+        role=UserRole(u["role"]),
+        hashed_password=hashed_password
+    )
     db.add(user)
 
 db.commit()
+print("Seeded users successfully.")
 db.close()
-
-print("Seeded users successfully")
