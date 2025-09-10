@@ -15,4 +15,3 @@ def list_patients(db:Session = Depends(get_db)):
 @router.post("/", response_model=PatientRead)
 def add_patient(patient: PatientCreate, db: Session = Depends(get_db)):
     return create_patient(db, patient)
-
