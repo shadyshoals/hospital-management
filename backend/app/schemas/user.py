@@ -14,8 +14,8 @@ class UserCreate(UserBase):
     password: str
 
 class UserUpdate(BaseModel):
-    first_name: str | None = None
-    last_name: str | None = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     # role: UserRole | None = None
 
 class UserRead(UserBase):
@@ -28,7 +28,7 @@ class UserRead(UserBase):
 
 class AdminCreate(UserBase):
     department: Optional[str]
-    permission_level: int
+    permission_level: Optional[int]
 
 class AdminOut(UserBase):
     id: int
@@ -40,6 +40,13 @@ class AdminOut(UserBase):
     class Config:
         orm_mode = True
 
+class AdminUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    department: Optional[str] = None
+    permission_level: Optional[int] = None
+
 class DoctorCreate(UserBase):
     specialty: Optional[str]
     doctor_license_number: Optional[str]
@@ -47,12 +54,19 @@ class DoctorCreate(UserBase):
 class DoctorOut(UserBase):
     id: int
     role: str = UserRole.doctor
-    specialty: Optional[str]
+    specialty: Optional[str] = None
     doctor_license_number: Optional[str]
     created_at: datetime
 
     class Config:
         orm_mode = True
+
+class DoctorUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    specialty: Optional[str] = None
+    doctor_license_number: Optional[str]
 
 class NurseCreate(UserBase):
     unit: Optional[str]
@@ -68,6 +82,13 @@ class NurseOut(UserBase):
     class Config: 
         orm_mode = True
 
+class NurseUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    unit: Optional[str]
+    shift: Optional[str]
+
 class PharmacistCreate(UserBase):
     pharmacist_license_number: Optional[str]
     pharmacy_location: Optional[str]
@@ -81,6 +102,13 @@ class PharmacistOut(UserBase):
 
     class Config:
         orm_mode = True
+
+class PharmacistUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    pharmacist_license_number: Optional[str] = None
+    pharmacy_location: Optional[str] = None
 
 class PhysiotherapistCreate(UserBase):
     specialization: Optional[str]
@@ -96,6 +124,13 @@ class PhysiotherapistOut(UserBase):
     class Config:
         orm_mode = True
 
+class PhysiotherapistUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    specialization: Optional[str] = None
+    physiotherapist_license_number: Optional[str] = None
+
 class RecreationCreate(UserBase):
     office_location: Optional[str]
     programs_responsible_for: Optional[str]
@@ -109,6 +144,13 @@ class RecreationOut(UserBase):
 
     class Config:
         orm_mode = True
+
+class RecreationUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    office_location: Optional[str] = None
+    programs_responsible_for: Optional[str] = None
 
 class PatientCreate(UserBase):
     medical_record_number: str
@@ -125,3 +167,11 @@ class PatientOut(UserBase):
 
     class Config:
         orm_mode = True
+
+class PatientUpdate(BaseModel):
+    username: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    medical_record_number: Optional[str] = None
+    medical_history: Optional[str] = None
+    emergency_contact: Optional[str] = None
