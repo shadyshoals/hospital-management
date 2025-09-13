@@ -37,7 +37,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    role = Column(SQLEnum(UserRole), nullable=False) # e.g. admin, doctor, nurse
+    # role = Column(SQLEnum(UserRole), nullable=False) # e.g. admin, doctor, nurse
 
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
 
@@ -65,7 +65,7 @@ class User(Base):
 
 class Admin(User):
     department = Column(String, nullable=True)
-    permission_level = Column(Integer, nullable=False)
+    permission_level = Column(Integer, nullable=True)
     
     __mapper_args__ = {"polymorphic_identity": UserRole.admin}
 
