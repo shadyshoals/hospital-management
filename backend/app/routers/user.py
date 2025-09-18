@@ -6,7 +6,10 @@ from app.schemas import user as user_schema
 from app.database import get_db
 from app.schemas.user import AdminCreate, AdminOut, DoctorCreate, DoctorOut, NurseCreate, NurseOut, PharmacistCreate, PharmacistOut, PhysiotherapistCreate, PhysiotherapistOut, RecreationCreate, RecreationOut, PatientCreate, PatientOut, UserRole
 # from app.dependencies import pwd_context
+from app.utils.security import get_current_user
+from app.models.user import Admin, Doctor, User
 from typing import Union
+from app.utils.roles import require_role
 
 UserOut = Union[
     user_schema.AdminOut,
@@ -27,47 +30,26 @@ router = APIRouter(prefix="/users", tags=["users"])
 ########################################################
 
 @router.post("/admin", response_model=AdminOut)
-def create_admin_user(admin: AdminCreate, db: Session = Depends(get_db)):
-    admin_dict = admin.dict()
-    admin_dict["hashed_password"] = "placeholder_password"
-    db_admin = user_crud.create_admin(db, admin_dict)
-    return db_admin
+def create_admin_user(admin: AdminCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_admin(db, admin)
 @router.post("/doctor", response_model=DoctorOut)
-def create_doctor_user(doctor: DoctorCreate, db: Session = Depends(get_db)):
-    doctor_dict = doctor.dict()
-    doctor_dict["hashed_password"] = "placeholder_password"
-    db_doctor = user_crud.create_doctor(db, doctor_dict)
-    return db_doctor
+def create_doctor_user(doctor: DoctorCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_doctor(db, doctor)
 @router.post("/nurse", response_model=NurseOut)
-def create_nurse_user(nurse: NurseCreate, db: Session = Depends(get_db)):
-    nurse_dict = nurse.dict()
-    nurse_dict["hashed_password"] = "placeholder_password"
-    db_nurse = user_crud.create_nurse(db, nurse_dict)
-    return db_nurse
+def create_nurse_user(nurse: NurseCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_nurse(db, nurse)
 @router.post("/pharmacist", response_model=PharmacistOut)
-def create_pharmacist_user(pharmacist: PharmacistCreate, db: Session = Depends(get_db)):
-    pharmacist_dict = pharmacist.dict()
-    pharmacist_dict["hashed_password"] = "placeholder_password"
-    db_pharmacist = user_crud.create_pharmacist(db, pharmacist_dict)
-    return db_pharmacist
+def create_pharmacist_user(pharmacist: PharmacistCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_pharmacist(db, pharmacist)
 @router.post("/physiotherapist", response_model=PhysiotherapistOut)
-def create_physiotherapist_user(physiotherapist: PhysiotherapistCreate, db: Session = Depends(get_db)):
-    physiotherapist_dict = physiotherapist.dict()
-    physiotherapist_dict["hashed_password"] = "placeholder_password"
-    db_physiotherapist = user_crud.create_physiotherapist(db, physiotherapist_dict)
-    return db_physiotherapist
+def create_physiotherapist_user(physiotherapist: PhysiotherapistCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_physiotherapist(db, physiotherapist)
 @router.post("/recreation", response_model=RecreationOut)
-def create_recreation_user(recreation: RecreationCreate, db: Session = Depends(get_db)):
-    recreation_dict = recreation.dict()
-    recreation_dict["hashed_password"] = "placeholder_password"
-    db_recreation = user_crud.create_recreation(db, recreation_dict)
-    return db_recreation
+def create_recreation_user(recreation: RecreationCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin]))):
+    return user_crud.create_recreation(db, recreation)
 @router.post("/patient", response_model=PatientOut)
-def create_patient_user(patient: PatientCreate, db: Session = Depends(get_db)):
-    patient_dict = patient.dict()
-    patient_dict["hashed_password"] = "placeholder_password"
-    db_patient = user_crud.create_patient(db, patient_dict)
-    return db_patient
+def create_patient_user(patient: PatientCreate, db: Session = Depends(get_db), _: any = Depends(require_role([Admin, Doctor]))):
+    return user_crud.create_patient(db, patient)
 
 # @router.post("/", response_model=user_schema.UserRead)
 # def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
@@ -179,3 +161,7 @@ def delete_user(user_id: int, user_type: Optional[str] = None, db: Session = Dep
     
     user_crud.delete_user(db, db_user)
     return None # 204 No Content
+
+@router.get("/me", response_model=user_schema.UserRead)
+def read_users_me(current_user: User = Depends(get_current_user)):
+    return current_user

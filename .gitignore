@@ -1,6 +1,9 @@
 # Python virtualenv
 backend/env/
 
+# Backend environment variables
+backend/.env
+
 # Bytecode
 __pycache__/
 *.py[cod]

@@ -20,13 +20,13 @@ class UserUpdate(BaseModel):
 
 class UserRead(UserBase):
     id: int
-    role: str
+    #role: str
     created_at: datetime
     
     class Config:
         orm_mode = True
 
-class AdminCreate(UserBase):
+class AdminCreate(UserCreate):
     department: Optional[str]
     permission_level: Optional[int]
 
@@ -47,7 +47,7 @@ class AdminUpdate(BaseModel):
     department: Optional[str] = None
     permission_level: Optional[int] = None
 
-class DoctorCreate(UserBase):
+class DoctorCreate(UserCreate):
     specialty: Optional[str]
     doctor_license_number: Optional[str]
 
@@ -68,7 +68,7 @@ class DoctorUpdate(BaseModel):
     specialty: Optional[str] = None
     doctor_license_number: Optional[str]
 
-class NurseCreate(UserBase):
+class NurseCreate(UserCreate):
     unit: Optional[str]
     shift: Optional[str]
 
@@ -89,7 +89,7 @@ class NurseUpdate(BaseModel):
     unit: Optional[str]
     shift: Optional[str]
 
-class PharmacistCreate(UserBase):
+class PharmacistCreate(UserCreate):
     pharmacist_license_number: Optional[str]
     pharmacy_location: Optional[str]
 
@@ -110,7 +110,7 @@ class PharmacistUpdate(BaseModel):
     pharmacist_license_number: Optional[str] = None
     pharmacy_location: Optional[str] = None
 
-class PhysiotherapistCreate(UserBase):
+class PhysiotherapistCreate(UserCreate):
     specialization: Optional[str]
     physiotherapist_license_number: Optional[str]
 
@@ -131,7 +131,7 @@ class PhysiotherapistUpdate(BaseModel):
     specialization: Optional[str] = None
     physiotherapist_license_number: Optional[str] = None
 
-class RecreationCreate(UserBase):
+class RecreationCreate(UserCreate):
     office_location: Optional[str]
     programs_responsible_for: Optional[str]
 
@@ -152,7 +152,7 @@ class RecreationUpdate(BaseModel):
     office_location: Optional[str] = None
     programs_responsible_for: Optional[str] = None
 
-class PatientCreate(UserBase):
+class PatientCreate(UserCreate):
     medical_record_number: str
     medical_history: Optional[str]
     emergency_contact: Optional[str]
