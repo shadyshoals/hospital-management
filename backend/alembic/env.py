@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 # Import models
-from app.models import patient, user, appointment
+from app.models import patient, user, appointment, medical_history
 from app.database import Base
 
 # this is the Alembic Config object, which provides

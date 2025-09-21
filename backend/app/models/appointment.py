@@ -6,18 +6,19 @@ from enum import Enum
 
 class AppointmentStatus(str, Enum):
     scheduled = "scheduled"
-    completed = "completed"
+    completed = "complete"
     canceled = "canceled"
+    missed = "missed"
 
 class Appointment(Base):
     __tablename__ = "appointments"
     id = Column(Integer, primary_key=True, index=True)
-    doctor_id = Column(Integer, ForeignKey("users.id"))
-    patient_id = Column(Integer, ForeignKey("users.id"))
+    doctor_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    patient_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     doctor = relationship("User", foreign_keys=[doctor_id], back_populates="appointments_as_doctor")
     patient = relationship("User", foreign_keys=[patient_id], back_populates="appointments_as_patient")
-    scheduled_time = Column(DateTime, nullable=False)
-
+    time = Column(DateTime, nullable=False)
     status = Column(SQLEnum(AppointmentStatus, name="appointmentstatus"), default=AppointmentStatus.scheduled, nullable=False)
+    notes = Column(String, nullable=True)
 
     created_at = Column(DateTime, default = datetime.now(timezone.utc))

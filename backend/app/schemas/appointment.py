@@ -16,24 +16,32 @@ class AppointmentStatus(str, Enum):
     scheduled = "scheduled"
     completed = "completed"
     canceled = "canceled"
+    missed = "missed"
 
 class AppointmentBase(BaseModel):
     patient_id: int
     doctor_id: int
-    scheduled_time: datetime
+    time: datetime
     status: AppointmentStatus = AppointmentStatus.scheduled
+    notes: Optional[str] = None
 
 class AppointmentCreate(AppointmentBase):
     pass
 
-class AppointmentRead(AppointmentBase):
+class AppointmentUpdate(BaseModel):
+    patient_id: int
+    doctor_id: int
+    time: Optional[datetime] = None
+    status: Optional [AppointmentStatus] = None
+    notes: Optional[str] = None
+
+class AppointmentOut(AppointmentBase):
     id: int
-    doctor: Optional[UserRead]
-    patient: Optional[UserRead]
-    scheduled_time: datetime
+    doctor: UserRead
+    patient: UserRead
+    time: datetime
     status:AppointmentStatus
     created_at: datetime
 
     class Config:
         orm_mode = True
-

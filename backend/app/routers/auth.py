@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
 from app.utils.security import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+import app.crud.user as user_crud
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -13,7 +14,8 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     db: Session = Depends(get_db)
 ):
-    user = db.query(User).filter(User.username == form_data.username).first()
+    # user = db.query(User).filter(User.username == form_data.username).first()
+    user = user_crud.get_by_username(db, form_data.username)
    
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(

@@ -154,14 +154,14 @@ class RecreationUpdate(BaseModel):
 
 class PatientCreate(UserCreate):
     medical_record_number: str
-    medical_history: Optional[str]
+    # medical_history: Optional[str]
     emergency_contact: Optional[str]
 
 class PatientOut(UserBase):
     id: int
     role: str = UserRole.patient
     medical_record_number: str
-    medical_history: Optional[str]
+    # medical_history: Optional[str]
     emergency_contact: Optional[str]
     created_at: datetime
 
@@ -173,5 +173,5 @@ class PatientUpdate(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     medical_record_number: Optional[str] = None
-    medical_history: Optional[str] = None
+    # medical_history: Optional[str] = None
     emergency_contact: Optional[str] = None
