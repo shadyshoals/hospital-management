@@ -61,6 +61,12 @@ class User(Base):
         cascade="all, delete-orphan"
     )
 
+    medical_history = relationship(
+        "MedicalHistory",
+        back_populates="patient",
+        cascade="all, delete-orphan"
+    )
+
 ##### SUBCLASSES ######
 
 class Admin(User):
@@ -101,7 +107,7 @@ class Recreation(User):
 
 class Patient(User):
     medical_record_number = Column(String, nullable=True)
-    medical_history = Column(String, nullable=True)
+    # medical_history = Column(String, nullable=True)
     emergency_contact = Column(String, nullable=True)
 
     __mapper_args__ = {"polymorphic_identity": UserRole.patient}

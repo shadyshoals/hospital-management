@@ -104,7 +104,7 @@ def create_patient(db: Session, patient: user_schema.PatientCreate) -> Patient:
         first_name = patient.first_name,
         last_name = patient.last_name,
         medical_record_number = patient.medical_record_number,
-        medical_history = patient.medical_history,
+        # medical_history = patient.medical_history,
         emergency_contact = patient.emergency_contact,
     )
     db.add(db_patient)
@@ -138,6 +138,9 @@ def get_by_role(db: Session, role: UserRole):
 
 def get_by_first_name(db: Session, first_name: str):
     return db.query(User).filter(User.first_name == first_name).all()
+
+def get_by_username(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()
 
 # UPDATE
 def update_user(db: Session, user_id: int, updates: dict):
