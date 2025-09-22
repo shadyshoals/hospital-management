@@ -6,7 +6,6 @@ from app.models.user import User, Admin, Doctor, Nurse, Pharmacist, Physiotherap
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 # Create
 def create_admin(db: Session, admin: user_schema.AdminCreate) -> Admin:
     """
