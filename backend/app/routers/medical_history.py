@@ -53,6 +53,7 @@ def download_medical_history(
     if not medical_history_record:
         raise HTTPException(status=status.HTTP_404_NOT_FOUND, detail="File not found")
     return FileResponse(path=medical_history_record.document_path)
+
 @router.patch("/{medical-history-id}", response_model=MedicalHistoryUpdate)
 def update_medical_history(
     medical_history_id: int, 

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.crud import user as user_crud
@@ -10,6 +11,8 @@ from app.utils.security import get_current_user
 from app.models.user import Admin, Doctor, User
 from typing import Union
 from app.utils.roles import require_role
+
+from app.utils.file_services import generate_pdf_patient
 
 UserOut = Union[
     user_schema.AdminOut,
@@ -77,6 +80,11 @@ def get_by_role(role: UserRole, db: Session = Depends(get_db)):
 @router.get("/by-firstname/{first_name}", response_model=List[UserOut])
 def get_by_first_name(first_name: str, db: Session = Depends(get_db)):
     return user_crud.get_by_first_name(db, first_name)
+
+@router.get("/by-id/{patient_id}/download")
+def download_patient_summary(patient_id: int, db: Session = Depends(get_db)):
+    summary_path = generate_pdf_patient(patient_id, db)
+    return FileResponse(summary_path)
 
 #########################################################
 #################### PATCH ##############################
